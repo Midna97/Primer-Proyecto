@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\CategoriaModel;
 
 class CategoriaController extends Controller
 {
@@ -12,7 +13,10 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $catPaginate = Categoria::paginate(10);
+        //Obtener todos los registros.
+        return response()->json(['categoria'=>$catPaginate]);
+
     }
 
     /**
@@ -28,15 +32,18 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cat = Categoria::create(['description'=>$request->description]);
+        return response()->json(['description'=> $cat]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $cat = $request->query('id');
+        $catWhere = Categoria::where('categoria',$id)->get();
+        return response()->json(['id' => $catWhere]);
     }
 
     /**

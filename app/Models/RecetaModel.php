@@ -18,6 +18,7 @@ class RecetaModel extends Model
         'titulo',
         'descripcion',
         'intrucciones',
+        'tipoAlimentoId',
     ];
 
     /**

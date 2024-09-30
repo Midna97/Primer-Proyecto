@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\RecetaModel;
 
 class RecetaController extends Controller
 {
@@ -12,7 +13,9 @@ class RecetaController extends Controller
      */
     public function index()
     {
-        //
+        $recetaPaginate = Receta::paginate(10);
+        //Obtener todos los registros.
+        return response()->json(['receta'=>$recetaPaginate]);
     }
 
     /**
@@ -28,15 +31,19 @@ class RecetaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $receta = Receta::create(['titulo'=>$request->titulo,'descripcion'=>$request->descripcion,'instrucciones'=>$request->instrucciones,'tipoAlimentoId'=>$request->tipoAlimentoI]);
+        return response()->json(['titulo'=> $receta]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $titulo = $request->query('titulo');
+        $recetaWhere = Receta::where('titulo',$titulo)->get();
+        return response()->json(['receta' => $recetaWhere]);
+
     }
 
     /**

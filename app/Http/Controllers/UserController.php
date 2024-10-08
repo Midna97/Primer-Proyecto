@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $userPaginate = User::paginate(10);
+        $userPaginate = User::with('roles')->paginate(10);
         //Obtener todos los registros.
         return response()->json(['user'=>$userPaginate]);
 
@@ -42,10 +42,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(String $id)
     {
-        $email = $request->query('email');
-        $userWhere = User::where('email',$email)->get();
+        $userWhere = User::with('roles')->where('id',$id)->get();
         return response()->json(['user' => $userWhere]);
     }
 

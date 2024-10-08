@@ -14,8 +14,15 @@ class CategoriaModel extends Model
      *
      * @var array<int, string>
      */
+
+    protected $table='catAlimentos';
     protected $fillable = [
+        'id',
         'description',
     ];
+
+    public function recetas(){
+        return $this->hasMany(RecetaModel::class, 'tipoAlimentoId');
+    }
 
 }

@@ -11,11 +11,16 @@ class RecetaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $recetaPaginate = Receta::paginate(10);
+        //$recetaPaginate = RecetaModel::paginate(10);
         //Obtener todos los registros.
-        return response()->json(['receta'=>$recetaPaginate]);
+       // return response()->json(['receta'=>$recetaPaginate]);
+
+        $titulo = $request->input('titulo');
+        $recetaWhere = RecetaModel::where('titulo',$titulo)->paginate(10);
+        return response()->json(['receta' => $recetaWhere]);
+
     }
 
     /**
@@ -31,18 +36,21 @@ class RecetaController extends Controller
      */
     public function store(Request $request)
     {
-        $receta = Receta::create(['titulo'=>$request->titulo,'descripcion'=>$request->descripcion,'instrucciones'=>$request->instrucciones,'tipoAlimentoId'=>$request->tipoAlimentoI]);
+        $receta = RecetaModel::create(['titulo'=>$request->titulo,'descripcion'=>$request->descripcion,'instrucciones'=>$request->instrucciones,'tipoAlimentoId'=>$request->tipoAlimentoId]);
         return response()->json(['titulo'=> $receta]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(String $id)
     {
-        $titulo = $request->query('titulo');
-        $recetaWhere = Receta::where('titulo',$titulo)->get();
-        return response()->json(['receta' => $recetaWhere]);
+        try {
+            $receta = RecetaModel::with('categoriaModel')->findOrFail($id);
+            return response()->json($receta);
+        } catch (ModelNotFoundException $th) {
+            return response()->json(['error' => 'No existe esta receta'],404);
+        }
 
     }
 

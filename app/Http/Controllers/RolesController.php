@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\CategoriaModel;
+use App\Models\Roles;
 
-class CategoriaController extends Controller
+class RolesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $catPaginate = CategoriaModel::paginate(10);
-        //Obtener todos los registros.
-        return response()->json(['categoria'=>$catPaginate]);
+        $roles = $request->input('rol');
+        $rolesWhere = Roles::where('rol',$roles)->paginate(10);
+        return response()->json(['rol' => $rolesWhere]);
 
     }
 
@@ -32,18 +32,21 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        $cat = CategoriaModel::create(['description'=>$request->description]);
-        return response()->json(['description'=> $cat]);
+        $roles = Roles::create(['id'=>$request->id,'rol'=>$request->rol]);
+        return response()->json(['rol'=> $roles]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(string $id)
     {
-        $cat = $request->query('id');
-        $catWhere = CategoriaModel::where('categoria',$id)->get();
-        return response()->json(['id' => $catWhere]);
+        try {
+            $roles = Roles::with('user')->findOrFail($id);
+            return response()->json($roles);
+        } catch (ModelNotFoundException $th) {
+            return response()->json(['error' => 'No existe el rol'],404);
+        }
     }
 
     /**

@@ -14,12 +14,19 @@ class RecetaModel extends Model
      *
      * @var array<int, string>
      */
+    protected $table='recetas';
     protected $fillable = [
         'titulo',
         'descripcion',
-        'intrucciones',
+        'instrucciones',
         'tipoAlimentoId',
+
     ];
+
+    public function categoriaModel(){
+        return $this->belongsTo(CategoriaModel::class, 'tipoAlimentoId');
+
+    }
 
     /**
      * The attributes that should be hidden for serialization.

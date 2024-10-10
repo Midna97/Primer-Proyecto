@@ -18,7 +18,6 @@ class Roles extends Model
        'rol',
        'created_at',
        'updated_at',
-       'edo',
 
    ];
 
@@ -27,27 +26,6 @@ class Roles extends Model
 
    }
 
-   /**
-    * The attributes that should be hidden for serialization.
-    *
-    * @var array<int, string>
-    */
-   protected $hidden = [
-       'edo',
-   ];
-
-   /**
-    * Get the attributes that should be cast.
-    *
-    * @return array<string, string>
-    */
-   protected function casts(): array
-   {
-       return [
-           
-           'edo' => 'active',
-       ];
-   }
 }
 
 
